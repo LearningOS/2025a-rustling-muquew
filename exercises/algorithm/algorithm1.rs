@@ -2,7 +2,7 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -69,15 +69,46 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
-	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+	// pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+	// {
+	// 	//TODO
+	// 	Self {
+    //         length: 0,
+    //         start: None,
+    //         end: None,
+    //     }
+	// }
+}
+impl<T: PartialOrd + Copy> LinkedList<T> {
+    pub fn merge(mut list_a: LinkedList<T>, mut list_b: LinkedList<T>) -> Self {
+        let mut new_list = LinkedList::new();
+        let mut a_index = 0;
+        let mut b_index = 0;
+
+        // 同时遍历 list_a 和 list_b
+        while let (Some(a_val), Some(b_val)) = (list_a.get(a_index), list_b.get(b_index)) {
+            if *a_val <= *b_val {
+                new_list.add(*a_val);
+                a_index += 1;
+            } else {
+                new_list.add(*b_val);
+                b_index += 1;
+            }
         }
-	}
+
+        // 添加剩余元素
+        while let Some(a_val) = list_a.get(a_index) {
+            new_list.add(*a_val);
+            a_index += 1;
+        }
+
+        while let Some(b_val) = list_b.get(b_index) {
+            new_list.add(*b_val);
+            b_index += 1;
+        }
+
+        new_list
+    }
 }
 
 impl<T> Display for LinkedList<T>
